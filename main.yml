@@ -3,6 +3,10 @@
   hosts: all
   become: true
 
+  handlers:
+    - name: Import handlers
+      ansible.builtin.import_tasks: handlers/main.yml
+
   tasks:
     - name: Install docker with compose plugin and pip packages
       ansible.builtin.import_tasks: tasks/docker.yml
