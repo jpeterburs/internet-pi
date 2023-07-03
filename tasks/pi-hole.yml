@@ -22,9 +22,4 @@
     line: "name_servers=127.0.0.1"
     dest: "/etc/resolvconf.conf"
     regexp: "^#?name_servers="
-  register: resolvconf_file
-
-- name: Regenerate resolvconf if file is changed
-  ansible.builtin.command: resolvconf -u
-  changed_when: false
-  when: resolvconf_file is changed
+  notify: Regenerate resolvconf
