@@ -1,0 +1,30 @@
+---
+- name: Create pi-hole directory
+  ansible.builtin.file:
+    path: ~/pi-hole
+    state: directory
+    mode: 0755
+  register: pi_hole_dir
+
+- name: Copy docker-compose.yml
+  ansible.builtin.copy:
+    src: files/docker-compose.yml
+    dest: "{{ pi_hole_dir.path }}/docker-compose.yml"
+    mode: 0640
+
+- name: Start pi-hole service
+  community.docker.docker_compose:
+    project_src: "{{ pi_hole_dir.path }}/"
+    build: false
+
+- name: Use local name server
+  ansible.builtin.lineinfile:
+    line: "name_servers=127.0.0.1"
+    dest: "/etc/resolvconf.conf"
+    regexp: "^#?name_servers="
+  register: resolvconf_file
+
+- name: Regenerate resolvconf if file is changed
+  ansible.builtin.command: resolvconf -u
+  changed_when: false
+  when: resolvconf_file is changed

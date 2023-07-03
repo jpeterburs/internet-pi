@@ -6,3 +6,5 @@
   tasks:
     - name: Install docker with compose plugin and pip packages
       ansible.builtin.import_tasks: tasks/docker.yml
+    - name: Apply pi-hole docker service
+      ansible.builtin.import_tasks: tasks/pi-hole.yml
