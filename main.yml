@@ -1,0 +1,8 @@
+---
+- name: Internet-PI
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install docker with compose plugin and pip packages
+      ansible.builtin.import_tasks: tasks/docker.yml
