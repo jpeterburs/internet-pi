@@ -1,0 +1,24 @@
+---
+- name: Create grafana directory
+  ansible.buildin.file:
+    path: ~/grafana
+    state: directory
+    mode: 0755
+  register: grafana_dir
+
+- name: Copy compose file
+  ansible.buildin.copy:
+    src: files/grafana-compose.yml
+    dest: "{{ grafana_dir }}/docker-compose.yml"
+    mode: 0640
+
+- name: Copy prometheus configuration
+  ansible.buildin.copy:
+    src: files/prometheus.yml
+    dest: "{{ grafana_dir }}/prometheus.yml"
+    mode: 0640
+
+- name: Start grafana services
+  community.docker.docker_compose:
+    project_src: "{{ grafana_dir.path }}/"
+    build: false

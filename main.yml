@@ -12,3 +12,5 @@
       ansible.builtin.import_tasks: tasks/docker.yml
     - name: Apply pi-hole docker service
       ansible.builtin.import_tasks: tasks/pi-hole.yml
+    - name: Apply grafana docker service
+      ansible.builtin.import_tasks: tasks/grafana.yml
