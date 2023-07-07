@@ -6,9 +6,9 @@
     mode: 0755
   register: pi_hole_dir
 
-- name: Copy docker-compose.yml
+- name: Copy compose file
   ansible.builtin.copy:
-    src: files/docker-compose.yml
+    src: files/pi-hole-compose.yml
     dest: "{{ pi_hole_dir.path }}/docker-compose.yml"
     mode: 0640
 
