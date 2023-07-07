@@ -1,8 +1,10 @@
 ---
 - name: Create pi-hole directory
   ansible.builtin.file:
-    path: ~/pi-hole
+    path: pi-hole
     state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: 0755
   register: pi_hole_dir
 
@@ -10,11 +12,13 @@
   ansible.builtin.copy:
     src: files/pi-hole-compose.yml
     dest: "{{ pi_hole_dir.path }}/docker-compose.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: 0640
 
 - name: Start pi-hole service
   community.docker.docker_compose:
-    project_src: "{{ pi_hole_dir.path }}/"
+    project_src: "{{ pi_hole_dir.path }}"
     build: false
 
 - name: Use local name server
