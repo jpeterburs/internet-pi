@@ -35,7 +35,7 @@
       - docker-compose
     executable: pip3
 
-- name: "Add user {{ ansible_user  }} to group docker"
+- name: "Add user to group docker: {{ ansible_user }}"
   ansible.builtin.user:
     name: "{{ ansible_user }}"
     groups: docker
