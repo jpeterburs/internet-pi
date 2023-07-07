@@ -12,9 +12,22 @@ services:
       - 80:80/tcp
     environment:
       TZ: Europe/Berlin
+      WEBPASSWORD: 'C%Aw5yw5J*aPQkHp'
     volumes:
       - ./etc-pihole:/etc/pihole
       - ./dnsmasq:/etc/dnsmasq.d
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
+
+  pihole-exporter:
+    container_name: pihole-exporter
+    image: ekofr/pihole-exporter
+    ports:
+      - 9617:9617
+    environment:
+      PIHOLE_HOSTNAME: pihole
+      PIHOLE_PASSWORD: 'C%Aw5yw5J*aPQkHp'
+    depends_on:
+      - pihole
+    restart: always

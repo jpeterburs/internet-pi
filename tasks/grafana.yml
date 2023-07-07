@@ -1,0 +1,30 @@
+---
+- name: Create grafana directory
+  ansible.builtin.file:
+    path: grafana
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+  register: grafana_dir
+
+- name: Copy compose file
+  ansible.builtin.copy:
+    src: files/grafana-compose.yml
+    dest: "{{ grafana_dir.path }}/docker-compose.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0640
+
+- name: Copy prometheus configuration
+  ansible.builtin.template:
+    src: templates/prometheus.yml.j2
+    dest: "{{ grafana_dir.path }}/prometheus.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+
+- name: Start grafana services
+  community.docker.docker_compose:
+    project_src: "{{ grafana_dir.path }}"
+    build: false
